@@ -14,19 +14,55 @@ import 'package:google_map_service/data/models/google_map/places_response.dart';
 import 'package:google_map_service/data/models/google_map/routes_response.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 
+/// A service class that provides all major Google Maps functionalities
+/// for Flutter applications using the official Google Maps Platform APIs.
+///
+/// This service includes:
+/// - Autocomplete & Place Details
+/// - Reverse Geocoding
+/// - Directions & Routes
+/// - Bitmap Marker utilities
+/// - Polyline decoding
+/// - Cluster marker generation
+///
+/// Example:
+/// ```dart
+/// final mapService = GoogleMapService('YOUR_API_KEY');
+/// final result = await mapService.queryAutocomplete('Eiffel Tower');
+/// ```
 class GoogleMapService {
+  /// HTTP client for legacy Google Maps API requests.
   final ApiClient apiClient = ApiClient(baseUrl: ApiUriConstants.gMapBaseUrl);
+
+  /// HTTP client for new Google Maps Routes API (v2) requests.
   final ApiClient apiClientV2 = ApiClient(
     baseUrl: ApiUriConstants.gMapV2BaseUrl,
   );
+
+  /// The Google Maps API key used for authentication.
   final String apiKey;
+
+  /// Standard headers used in API requests.
   Map<String, String> headers() => {
     'X-Goog-FieldMask': '*',
     'Content-Type': 'application/json',
     'X-Goog-Api-Key': apiKey,
   };
+
+  /// Creates a [GoogleMapService] instance with a given [apiKey].
   GoogleMapService(this.apiKey);
 
+  // ---------------------------------------------------------------------------
+  // GOOGLE PLACES AUTOCOMPLETE & DETAILS
+  // ---------------------------------------------------------------------------
+
+  /// Fetches place predictions based on an input query using the
+  /// **Google Places Autocomplete API**.
+  ///
+  /// Example:
+  /// ```dart
+  /// final response = await mapService.queryAutocomplete('coffee near London');
+  /// ```
   Future<PlacesResponse> queryAutocomplete(String input) async {
     final response = await apiClient.get(
       ApiUriConstants.gMapQueryAutocomplete(input, apiKey),
@@ -34,6 +70,12 @@ class GoogleMapService {
     return PlacesResponse.fromJson(response);
   }
 
+  /// Retrieves detailed information about a place using its `placeId`.
+  ///
+  /// Example:
+  /// ```dart
+  /// final place = await mapService.placeDetail('ChIJN1t_tDeuEmsRUsoyG83frY4');
+  /// ```
   Future<PlaceDetailResponse> placeDetail(String placeId) async {
     final response = await apiClient.get(
       ApiUriConstants.gMapPlaceDetail(placeId, apiKey),
@@ -41,6 +83,13 @@ class GoogleMapService {
     return PlaceDetailResponse.fromJson(response);
   }
 
+  /// Performs reverse geocoding to retrieve address details
+  /// for a given [LatLng] coordinate.
+  ///
+  /// Example:
+  /// ```dart
+  /// final address = await mapService.placeDetailByGeocode(LatLng(37.7749, -122.4194));
+  /// ```
   Future<PlaceDetailByGeocodeResponse> placeDetailByGeocode(
     LatLng latlng,
   ) async {
@@ -53,6 +102,22 @@ class GoogleMapService {
     return PlaceDetailByGeocodeResponse.fromJson(response);
   }
 
+  // ---------------------------------------------------------------------------
+  // ROUTES & DIRECTIONS API (V2)
+  // ---------------------------------------------------------------------------
+
+  /// Fetches route information between a [source] and [destination]
+  /// using the **Google Maps Directions API (v2)**.
+  ///
+  /// Includes distance, duration, and polyline information.
+  ///
+  /// Example:
+  /// ```dart
+  /// final route = await mapService.getRoutes(
+  ///   source: sourcePlace,
+  ///   destination: destinationPlace,
+  /// );
+  /// ```
   Future<RoutesResponse> getRoutes({
     PlaceDetails? source,
     PlaceDetails? destination,
@@ -74,8 +139,7 @@ class GoogleMapService {
           },
         },
       },
-      // Optional extras for better results
-      "travelMode": "DRIVE", // or WALK, BICYCLE, etc.
+      "travelMode": "DRIVE",
       "computeAlternativeRoutes": true,
     };
 
@@ -88,6 +152,16 @@ class GoogleMapService {
     return RoutesResponse.fromJson(response);
   }
 
+  // ---------------------------------------------------------------------------
+  // POLYLINE DECODING
+  // ---------------------------------------------------------------------------
+
+  /// Decodes an encoded polyline string into a list of [LatLng] coordinates.
+  ///
+  /// Example:
+  /// ```dart
+  /// final points = mapService.decodePolyline(encodedPolyline);
+  /// ```
   List<LatLng> decodePolyline(String encoded) {
     List<LatLng> poly = [];
     int index = 0, len = encoded.length;
@@ -118,8 +192,18 @@ class GoogleMapService {
     return poly;
   }
 
-  /// Converts a CircleAvatar widget into BitmapDescriptor for Google Maps,
-  /// with fallback to a default image if loading fails.
+  // ---------------------------------------------------------------------------
+  // CUSTOM MARKERS
+  // ---------------------------------------------------------------------------
+
+  /// Converts a network image into a circular [BitmapDescriptor] marker.
+  ///
+  /// If the image fails to load, a fallback avatar is used.
+  ///
+  /// Example:
+  /// ```dart
+  /// final markerIcon = await mapService.createCustomMarker(imageUrl);
+  /// ```
   Future<BitmapDescriptor> createCustomMarker(
     String imageUrl, {
     double size = 120,
@@ -131,11 +215,11 @@ class GoogleMapService {
     final Canvas canvas = Canvas(pictureRecorder);
     final double radius = size / 2;
 
-    // Draw outer border
+    // Draw border
     final Paint borderPaint = Paint()..color = borderColor;
     canvas.drawCircle(Offset(radius, radius), radius, borderPaint);
 
-    // Clip the canvas to a circle
+    // Clip circle
     final Path clipPath = Path()
       ..addOval(
         Rect.fromCircle(
@@ -147,24 +231,17 @@ class GoogleMapService {
 
     ui.Image? image;
 
+    // Try to load image
     try {
       final ImageProvider imageProvider = NetworkImage(imageUrl);
       final completer = Completer<ImageInfo>();
-
-      final ImageStreamListener listener = ImageStreamListener(
-        (ImageInfo info, _) {
-          if (!completer.isCompleted) completer.complete(info);
-        },
-        onError: (error, stackTrace) {
-          if (!completer.isCompleted) {
-            completer.completeError(error, stackTrace);
-          }
-        },
+      final listener = ImageStreamListener(
+        (ImageInfo info, _) => completer.complete(info),
+        onError: (error, stackTrace) =>
+            completer.completeError(error, stackTrace),
       );
-
       final stream = imageProvider.resolve(const ImageConfiguration());
       stream.addListener(listener);
-
       final imageInfo = await completer.future;
       image = imageInfo.image;
       stream.removeListener(listener);
@@ -172,25 +249,24 @@ class GoogleMapService {
       print('⚠️ Failed to load image: $e');
     }
 
-    // If loading failed, use fallback image
+    // Fallback image
     if (image == null) {
-      final ImageProvider fallbackProvider = const NetworkImage(
+      final ImageProvider fallback = const NetworkImage(
         'https://i.pravatar.cc/150?img=1',
       );
       final completer = Completer<ImageInfo>();
-
-      fallbackProvider
+      fallback
           .resolve(const ImageConfiguration())
           .addListener(
-            ImageStreamListener((ImageInfo info, _) {
-              if (!completer.isCompleted) completer.complete(info);
-            }),
+            ImageStreamListener(
+              (ImageInfo info, _) => completer.complete(info),
+            ),
           );
       final fallbackInfo = await completer.future;
       image = fallbackInfo.image;
     }
 
-    // Draw image inside clipped circle
+    // Draw image
     paintImage(
       canvas: canvas,
       rect: Rect.fromLTWH(
@@ -203,7 +279,7 @@ class GoogleMapService {
       fit: BoxFit.cover,
     );
 
-    // Convert canvas to bytes
+    // Convert to bytes
     final ui.Image markerAsImage = await pictureRecorder.endRecording().toImage(
       size.toInt(),
       size.toInt(),
@@ -215,58 +291,13 @@ class GoogleMapService {
     return BitmapDescriptor.fromBytes(byteData!.buffer.asUint8List());
   }
 
-  // /// Converts a CircleAvatar widget into BitmapDescriptor for Google Maps
-  // Future<BitmapDescriptor> createCustomMarker(
-  //   String imageUrl, {
-  //   double size = 120,
-  //   double borderWidth = 6,
-  //   Color borderColor = Colors.white,
-  // }) async {
-  //   final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-  //   final Canvas canvas = Canvas(pictureRecorder);
+  // ---------------------------------------------------------------------------
+  // MAP BOUND CALCULATION
+  // ---------------------------------------------------------------------------
 
-  //   final double radius = size / 2;
-
-  //   // Draw outer border
-  //   final Paint borderPaint = Paint()..color = borderColor;
-  //   canvas.drawCircle(Offset(radius, radius), radius, borderPaint);
-
-  //   // Clip the canvas to a circle
-  //   final Path clipPath = Path()
-  //     ..addOval(Rect.fromCircle(
-  //         center: Offset(radius, radius), radius: radius - borderWidth));
-  //   canvas.clipPath(clipPath);
-
-  //   // Load network image
-  //   final ImageProvider imageProvider = NetworkImage(imageUrl);
-  //   final completer = Completer<ImageInfo>();
-  //   imageProvider.resolve(const ImageConfiguration()).addListener(
-  //     ImageStreamListener((ImageInfo info, _) {
-  //       completer.complete(info);
-  //     }),
-  //   );
-  //   final imageInfo = await completer.future;
-  //   final ui.Image image = imageInfo.image;
-
-  //   // Draw image inside clipped circle
-  //   paintImage(
-  //     canvas: canvas,
-  //     rect: Rect.fromLTWH(borderWidth, borderWidth, size - 2 * borderWidth,
-  //         size - 2 * borderWidth),
-  //     image: image,
-  //     fit: BoxFit.cover,
-  //   );
-
-  //   // Convert canvas to marker
-  //   final ui.Image markerAsImage = await pictureRecorder
-  //       .endRecording()
-  //       .toImage(size.toInt(), size.toInt());
-  //   final ByteData? byteData =
-  //       await markerAsImage.toByteData(format: ui.ImageByteFormat.png);
-
-  //   return BitmapDescriptor.fromBytes(byteData!.buffer.asUint8List());
-  // }
-
+  /// Returns a [LatLngBounds] that fits both source and destination points.
+  ///
+  /// Used to adjust the camera to show both markers in view.
   LatLngBounds? getLatLngBoundFromSourceAndDest({
     PlaceDetails? source,
     PlaceDetails? destination,
@@ -274,8 +305,8 @@ class GoogleMapService {
     if (source == null || destination == null) return null;
     final LatLng src = source.geometry!.location!.toLatLng();
     final LatLng dst = destination.geometry!.location!.toLatLng();
-    // ✅ Fit camera to bounds of route
-    final bounds = LatLngBounds(
+
+    return LatLngBounds(
       southwest: LatLng(
         src.latitude < dst.latitude ? src.latitude : dst.latitude,
         src.longitude < dst.longitude ? src.longitude : dst.longitude,
@@ -285,11 +316,15 @@ class GoogleMapService {
         src.longitude > dst.longitude ? src.longitude : dst.longitude,
       ),
     );
-    return bounds;
   }
 
-  /// Returns a BitmapDescriptor for use as a Google Map marker.
-  /// Supports both `.svg` and `.png` assets automatically.
+  // ---------------------------------------------------------------------------
+  // BITMAP FROM ASSETS
+  // ---------------------------------------------------------------------------
+
+  /// Loads a `.png` or `.svg` asset and converts it into a [BitmapDescriptor].
+  ///
+  /// Currently only supports `.png` assets.
   Future<BitmapDescriptor> bitmapDescriptorFromAsset(
     BuildContext context,
     String assetName, {
@@ -297,7 +332,6 @@ class GoogleMapService {
   }) async {
     if (assetName.toLowerCase().endsWith('.svg')) {
       throw Exception("Unsupported asset format");
-      // return _bitmapDescriptorFromSvgAsset(context, assetName, width: width);
     } else if (assetName.toLowerCase().endsWith('.png')) {
       return _bitmapDescriptorFromPngAsset(assetName, width: width);
     } else {
@@ -307,33 +341,7 @@ class GoogleMapService {
     }
   }
 
-  // Future<BitmapDescriptor> bitmapDescriptorFromSvgAsset(
-  //   BuildContext context,
-  //   String assetName, {
-  //   double width = 64,
-  // }) async {
-  //   // 1. Load the raw SVG string
-  //   final String svgString =
-  //       await DefaultAssetBundle.of(context).loadString(assetName);
-
-  //   // 2. Parse the SVG into a renderable object (don't type it as DrawableRoot)
-  //   final picture =  svg.SvgPicture.string(svgString);
-
-  //   // 3. Convert parsed SVG to a ui.Picture and then to ui.Image
-  //   //    pass a size so it scales correctly
-  //   // final ui.Picture picture = svgRoot.toPicture(
-  //   //   size: Size(width, width),
-  //   // );
-
-  //   final ui.Image image = await picture.toImage(width.toInt(), width.toInt());
-
-  //   // 4. Convert to PNG bytes and make BitmapDescriptor
-  //   final ByteData? bytes =
-  //       await image.toByteData(format: ui.ImageByteFormat.png);
-  //   return BitmapDescriptor.fromBytes(bytes!.buffer.asUint8List());
-  // }
-
-  /// Convert a PNG asset into a BitmapDescriptor
+  /// Converts a PNG asset into a resizable [BitmapDescriptor].
   Future<BitmapDescriptor> _bitmapDescriptorFromPngAsset(
     String assetName, {
     double width = 64,
@@ -341,7 +349,6 @@ class GoogleMapService {
     final ByteData data = await rootBundle.load(assetName);
     final Uint8List bytes = data.buffer.asUint8List();
 
-    // Resize image to specified width if needed
     final ui.Codec codec = await ui.instantiateImageCodec(
       bytes,
       targetWidth: width.toInt(),
@@ -355,7 +362,16 @@ class GoogleMapService {
     return BitmapDescriptor.fromBytes(resizedBytes!.buffer.asUint8List());
   }
 
-  // 🔵 Add this method for cluster count markers
+  // ---------------------------------------------------------------------------
+  // CLUSTER MARKER CREATION
+  // ---------------------------------------------------------------------------
+
+  /// Generates a circular cluster marker displaying the number of grouped markers.
+  ///
+  /// Example:
+  /// ```dart
+  /// final clusterIcon = await mapService.createClusterMarker(clusterCount: 8);
+  /// ```
   Future<BitmapDescriptor> createClusterMarker({
     required int clusterCount,
     double size = 120,
@@ -368,7 +384,7 @@ class GoogleMapService {
     final double radius = size / 2;
     final Offset center = Offset(radius, radius);
 
-    // Draw background circle
+    // Draw background
     canvas.drawCircle(center, radius, paint);
 
     // Draw count text
