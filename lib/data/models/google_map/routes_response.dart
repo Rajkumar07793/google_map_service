@@ -1,8 +1,5 @@
 class RoutesResponse {
-  RoutesResponse({
-    required this.routes,
-    required this.geocodingResults,
-  });
+  RoutesResponse({required this.routes, required this.geocodingResults});
 
   final List<Route> routes;
   final GeocodingResults? geocodingResults;
@@ -29,24 +26,18 @@ class RoutesResponse {
   }
 
   Map<String, dynamic> toJson() => {
-        "routes": routes.map((x) => x.toJson()).toList(),
-        "geocodingResults": geocodingResults?.toJson(),
-      };
+    "routes": routes.map((x) => x.toJson()).toList(),
+    "geocodingResults": geocodingResults?.toJson(),
+  };
 }
 
 class GeocodingResults {
-  GeocodingResults({
-    required this.origin,
-    required this.destination,
-  });
+  GeocodingResults({required this.origin, required this.destination});
 
   final Destination? origin;
   final Destination? destination;
 
-  GeocodingResults copyWith({
-    Destination? origin,
-    Destination? destination,
-  }) {
+  GeocodingResults copyWith({Destination? origin, Destination? destination}) {
     return GeocodingResults(
       origin: origin ?? this.origin,
       destination: destination ?? this.destination,
@@ -55,8 +46,9 @@ class GeocodingResults {
 
   factory GeocodingResults.fromJson(Map<String, dynamic> json) {
     return GeocodingResults(
-      origin:
-          json["origin"] == null ? null : Destination.fromJson(json["origin"]),
+      origin: json["origin"] == null
+          ? null
+          : Destination.fromJson(json["origin"]),
       destination: json["destination"] == null
           ? null
           : Destination.fromJson(json["destination"]),
@@ -64,9 +56,9 @@ class GeocodingResults {
   }
 
   Map<String, dynamic> toJson() => {
-        "origin": origin?.toJson(),
-        "destination": destination?.toJson(),
-      };
+    "origin": origin?.toJson(),
+    "destination": destination?.toJson(),
+  };
 }
 
 class Destination {
@@ -110,11 +102,11 @@ class Destination {
   }
 
   Map<String, dynamic> toJson() => {
-        "geocoderStatus": geocoderStatus?.toJson(),
-        "type": type.map((x) => x).toList(),
-        "placeId": placeId,
-        "partialMatch": partialMatch,
-      };
+    "geocoderStatus": geocoderStatus?.toJson(),
+    "type": type.map((x) => x).toList(),
+    "placeId": placeId,
+    "partialMatch": partialMatch,
+  };
 }
 
 class PolylineDetails {
@@ -195,14 +187,16 @@ class Route {
       distanceMeters: json["distanceMeters"],
       duration: json["duration"],
       staticDuration: json["staticDuration"],
-      polyline:
-          json["polyline"] == null ? null : Polyline.fromJson(json["polyline"]),
+      polyline: json["polyline"] == null
+          ? null
+          : Polyline.fromJson(json["polyline"]),
       description: json["description"],
       warnings: json["warnings"] == null
           ? []
           : List<String>.from(json["warnings"]!.map((x) => x)),
-      viewport:
-          json["viewport"] == null ? null : Viewport.fromJson(json["viewport"]),
+      viewport: json["viewport"] == null
+          ? null
+          : Viewport.fromJson(json["viewport"]),
       travelAdvisory: json["travelAdvisory"] == null
           ? null
           : PolylineDetails.fromJson(json["travelAdvisory"]),
@@ -219,19 +213,19 @@ class Route {
   }
 
   Map<String, dynamic> toJson() => {
-        "legs": legs.map((x) => x.toJson()).toList(),
-        "distanceMeters": distanceMeters,
-        "duration": duration,
-        "staticDuration": staticDuration,
-        "polyline": polyline?.toJson(),
-        "description": description,
-        "warnings": warnings.map((x) => x).toList(),
-        "viewport": viewport?.toJson(),
-        "travelAdvisory": travelAdvisory?.toJson(),
-        "localizedValues": localizedValues?.toJson(),
-        "routeLabels": routeLabels.map((x) => x).toList(),
-        "polylineDetails": polylineDetails?.toJson(),
-      };
+    "legs": legs.map((x) => x.toJson()).toList(),
+    "distanceMeters": distanceMeters,
+    "duration": duration,
+    "staticDuration": staticDuration,
+    "polyline": polyline?.toJson(),
+    "description": description,
+    "warnings": warnings.map((x) => x).toList(),
+    "viewport": viewport?.toJson(),
+    "travelAdvisory": travelAdvisory?.toJson(),
+    "localizedValues": localizedValues?.toJson(),
+    "routeLabels": routeLabels.map((x) => x).toList(),
+    "polylineDetails": polylineDetails?.toJson(),
+  };
 }
 
 class Leg {
@@ -282,8 +276,9 @@ class Leg {
       distanceMeters: json["distanceMeters"],
       duration: json["duration"],
       staticDuration: json["staticDuration"],
-      polyline:
-          json["polyline"] == null ? null : Polyline.fromJson(json["polyline"]),
+      polyline: json["polyline"] == null
+          ? null
+          : Polyline.fromJson(json["polyline"]),
       startLocation: json["startLocation"] == null
           ? null
           : Location.fromJson(json["startLocation"]),
@@ -300,30 +295,24 @@ class Leg {
   }
 
   Map<String, dynamic> toJson() => {
-        "distanceMeters": distanceMeters,
-        "duration": duration,
-        "staticDuration": staticDuration,
-        "polyline": polyline?.toJson(),
-        "startLocation": startLocation?.toJson(),
-        "endLocation": endLocation?.toJson(),
-        "steps": steps.map((x) => x.toJson()).toList(),
-        "localizedValues": localizedValues?.toJson(),
-      };
+    "distanceMeters": distanceMeters,
+    "duration": duration,
+    "staticDuration": staticDuration,
+    "polyline": polyline?.toJson(),
+    "startLocation": startLocation?.toJson(),
+    "endLocation": endLocation?.toJson(),
+    "steps": steps.map((x) => x.toJson()).toList(),
+    "localizedValues": localizedValues?.toJson(),
+  };
 }
 
 class Location {
-  Location({
-    required this.latLng,
-  });
+  Location({required this.latLng});
 
   final High? latLng;
 
-  Location copyWith({
-    High? latLng,
-  }) {
-    return Location(
-      latLng: latLng ?? this.latLng,
-    );
+  Location copyWith({High? latLng}) {
+    return Location(latLng: latLng ?? this.latLng);
   }
 
   factory Location.fromJson(Map<String, dynamic> json) {
@@ -332,24 +321,16 @@ class Location {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        "latLng": latLng?.toJson(),
-      };
+  Map<String, dynamic> toJson() => {"latLng": latLng?.toJson()};
 }
 
 class High {
-  High({
-    required this.latitude,
-    required this.longitude,
-  });
+  High({required this.latitude, required this.longitude});
 
   final double? latitude;
   final double? longitude;
 
-  High copyWith({
-    double? latitude,
-    double? longitude,
-  }) {
+  High copyWith({double? latitude, double? longitude}) {
     return High(
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
@@ -357,16 +338,13 @@ class High {
   }
 
   factory High.fromJson(Map<String, dynamic> json) {
-    return High(
-      latitude: json["latitude"],
-      longitude: json["longitude"],
-    );
+    return High(latitude: json["latitude"], longitude: json["longitude"]);
   }
 
   Map<String, dynamic> toJson() => {
-        "latitude": latitude,
-        "longitude": longitude,
-      };
+    "latitude": latitude,
+    "longitude": longitude,
+  };
 }
 
 class LegLocalizedValues {
@@ -394,10 +372,12 @@ class LegLocalizedValues {
 
   factory LegLocalizedValues.fromJson(Map<String, dynamic> json) {
     return LegLocalizedValues(
-      distance:
-          json["distance"] == null ? null : Distance.fromJson(json["distance"]),
-      duration:
-          json["duration"] == null ? null : Distance.fromJson(json["duration"]),
+      distance: json["distance"] == null
+          ? null
+          : Distance.fromJson(json["distance"]),
+      duration: json["duration"] == null
+          ? null
+          : Distance.fromJson(json["duration"]),
       staticDuration: json["staticDuration"] == null
           ? null
           : Distance.fromJson(json["staticDuration"]),
@@ -405,62 +385,42 @@ class LegLocalizedValues {
   }
 
   Map<String, dynamic> toJson() => {
-        "distance": distance?.toJson(),
-        "duration": duration?.toJson(),
-        "staticDuration": staticDuration?.toJson(),
-      };
+    "distance": distance?.toJson(),
+    "duration": duration?.toJson(),
+    "staticDuration": staticDuration?.toJson(),
+  };
 }
 
 class Distance {
-  Distance({
-    required this.text,
-  });
+  Distance({required this.text});
 
   final String? text;
 
-  Distance copyWith({
-    String? text,
-  }) {
-    return Distance(
-      text: text ?? this.text,
-    );
+  Distance copyWith({String? text}) {
+    return Distance(text: text ?? this.text);
   }
 
   factory Distance.fromJson(Map<String, dynamic> json) {
-    return Distance(
-      text: json["text"],
-    );
+    return Distance(text: json["text"]);
   }
 
-  Map<String, dynamic> toJson() => {
-        "text": text,
-      };
+  Map<String, dynamic> toJson() => {"text": text};
 }
 
 class Polyline {
-  Polyline({
-    required this.encodedPolyline,
-  });
+  Polyline({required this.encodedPolyline});
 
   final String? encodedPolyline;
 
-  Polyline copyWith({
-    String? encodedPolyline,
-  }) {
-    return Polyline(
-      encodedPolyline: encodedPolyline ?? this.encodedPolyline,
-    );
+  Polyline copyWith({String? encodedPolyline}) {
+    return Polyline(encodedPolyline: encodedPolyline ?? this.encodedPolyline);
   }
 
   factory Polyline.fromJson(Map<String, dynamic> json) {
-    return Polyline(
-      encodedPolyline: json["encodedPolyline"],
-    );
+    return Polyline(encodedPolyline: json["encodedPolyline"]);
   }
 
-  Map<String, dynamic> toJson() => {
-        "encodedPolyline": encodedPolyline,
-      };
+  Map<String, dynamic> toJson() => {"encodedPolyline": encodedPolyline};
 }
 
 class Step {
@@ -511,8 +471,9 @@ class Step {
     return Step(
       distanceMeters: json["distanceMeters"],
       staticDuration: json["staticDuration"],
-      polyline:
-          json["polyline"] == null ? null : Polyline.fromJson(json["polyline"]),
+      polyline: json["polyline"] == null
+          ? null
+          : Polyline.fromJson(json["polyline"]),
       startLocation: json["startLocation"] == null
           ? null
           : Location.fromJson(json["startLocation"]),
@@ -530,30 +491,24 @@ class Step {
   }
 
   Map<String, dynamic> toJson() => {
-        "distanceMeters": distanceMeters,
-        "staticDuration": staticDuration,
-        "polyline": polyline?.toJson(),
-        "startLocation": startLocation?.toJson(),
-        "endLocation": endLocation?.toJson(),
-        "navigationInstruction": navigationInstruction?.toJson(),
-        "localizedValues": localizedValues?.toJson(),
-        "travelMode": travelMode,
-      };
+    "distanceMeters": distanceMeters,
+    "staticDuration": staticDuration,
+    "polyline": polyline?.toJson(),
+    "startLocation": startLocation?.toJson(),
+    "endLocation": endLocation?.toJson(),
+    "navigationInstruction": navigationInstruction?.toJson(),
+    "localizedValues": localizedValues?.toJson(),
+    "travelMode": travelMode,
+  };
 }
 
 class StepLocalizedValues {
-  StepLocalizedValues({
-    required this.distance,
-    required this.staticDuration,
-  });
+  StepLocalizedValues({required this.distance, required this.staticDuration});
 
   final Distance? distance;
   final Distance? staticDuration;
 
-  StepLocalizedValues copyWith({
-    Distance? distance,
-    Distance? staticDuration,
-  }) {
+  StepLocalizedValues copyWith({Distance? distance, Distance? staticDuration}) {
     return StepLocalizedValues(
       distance: distance ?? this.distance,
       staticDuration: staticDuration ?? this.staticDuration,
@@ -562,8 +517,9 @@ class StepLocalizedValues {
 
   factory StepLocalizedValues.fromJson(Map<String, dynamic> json) {
     return StepLocalizedValues(
-      distance:
-          json["distance"] == null ? null : Distance.fromJson(json["distance"]),
+      distance: json["distance"] == null
+          ? null
+          : Distance.fromJson(json["distance"]),
       staticDuration: json["staticDuration"] == null
           ? null
           : Distance.fromJson(json["staticDuration"]),
@@ -571,24 +527,18 @@ class StepLocalizedValues {
   }
 
   Map<String, dynamic> toJson() => {
-        "distance": distance?.toJson(),
-        "staticDuration": staticDuration?.toJson(),
-      };
+    "distance": distance?.toJson(),
+    "staticDuration": staticDuration?.toJson(),
+  };
 }
 
 class NavigationInstruction {
-  NavigationInstruction({
-    required this.maneuver,
-    required this.instructions,
-  });
+  NavigationInstruction({required this.maneuver, required this.instructions});
 
   final String? maneuver;
   final String? instructions;
 
-  NavigationInstruction copyWith({
-    String? maneuver,
-    String? instructions,
-  }) {
+  NavigationInstruction copyWith({String? maneuver, String? instructions}) {
     return NavigationInstruction(
       maneuver: maneuver ?? this.maneuver,
       instructions: instructions ?? this.instructions,
@@ -603,28 +553,19 @@ class NavigationInstruction {
   }
 
   Map<String, dynamic> toJson() => {
-        "maneuver": maneuver,
-        "instructions": instructions,
-      };
+    "maneuver": maneuver,
+    "instructions": instructions,
+  };
 }
 
 class Viewport {
-  Viewport({
-    required this.low,
-    required this.high,
-  });
+  Viewport({required this.low, required this.high});
 
   final High? low;
   final High? high;
 
-  Viewport copyWith({
-    High? low,
-    High? high,
-  }) {
-    return Viewport(
-      low: low ?? this.low,
-      high: high ?? this.high,
-    );
+  Viewport copyWith({High? low, High? high}) {
+    return Viewport(low: low ?? this.low, high: high ?? this.high);
   }
 
   factory Viewport.fromJson(Map<String, dynamic> json) {
@@ -635,7 +576,7 @@ class Viewport {
   }
 
   Map<String, dynamic> toJson() => {
-        "low": low?.toJson(),
-        "high": high?.toJson(),
-      };
+    "low": low?.toJson(),
+    "high": high?.toJson(),
+  };
 }

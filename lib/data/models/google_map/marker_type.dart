@@ -1,8 +1,4 @@
-enum MarkerType {
-  rideUser,
-  source,
-  destination,
-}
+enum MarkerType { rideUser, source, destination }
 
 MarkerType markerTypeFromString(String value) {
   try {

@@ -24,7 +24,7 @@ Add the dependency to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  google_map_service: ^1.0.0
+  google_map_service: ^0.0.1
 ```
 
 Then run:

@@ -1,9 +1,5 @@
 class PlaceDetailResponse {
-  PlaceDetailResponse({
-    this.htmlAttributions,
-    this.result,
-    this.status,
-  });
+  PlaceDetailResponse({this.htmlAttributions, this.result, this.status});
 
   final List<dynamic>? htmlAttributions;
   final PlaceDetails? result;
@@ -26,17 +22,18 @@ class PlaceDetailResponse {
       htmlAttributions: json["html_attributions"] == null
           ? []
           : List<dynamic>.from(json["html_attributions"]!.map((x) => x)),
-      result:
-          json["result"] == null ? null : PlaceDetails.fromJson(json["result"]),
+      result: json["result"] == null
+          ? null
+          : PlaceDetails.fromJson(json["result"]),
       status: json["status"],
     );
   }
 
   Map<String, dynamic> toJson() => {
-        "html_attributions": htmlAttributions?.map((x) => x).toList(),
-        "result": result?.toJson(),
-        "status": status,
-      };
+    "html_attributions": htmlAttributions?.map((x) => x).toList(),
+    "result": result?.toJson(),
+    "status": status,
+  };
 }
 
 class PlaceDetails {
@@ -155,8 +152,11 @@ class PlaceDetails {
     return PlaceDetails(
       addressComponents: json["address_components"] == null
           ? []
-          : List<AddressComponent>.from(json["address_components"]!
-              .map((x) => AddressComponent.fromJson(x))),
+          : List<AddressComponent>.from(
+              json["address_components"]!.map(
+                (x) => AddressComponent.fromJson(x),
+              ),
+            ),
       adrAddress: json["adr_address"],
       businessStatus: json["business_status"],
       currentOpeningHours: json["current_opening_hours"] == null
@@ -166,8 +166,9 @@ class PlaceDetails {
           ? null
           : EditorialSummary.fromJson(json["editorial_summary"]),
       formattedAddress: json["formatted_address"],
-      geometry:
-          json["geometry"] == null ? null : Geometry.fromJson(json["geometry"]),
+      geometry: json["geometry"] == null
+          ? null
+          : Geometry.fromJson(json["geometry"]),
       icon: json["icon"],
       iconBackgroundColor: json["icon_background_color"],
       iconMaskBaseUri: json["icon_mask_base_uri"],
@@ -202,41 +203,36 @@ class PlaceDetails {
   }
 
   Map<String, dynamic> toJson() => {
-        "address_components":
-            addressComponents?.map((x) => x.toJson()).toList(),
-        "adr_address": adrAddress,
-        "business_status": businessStatus,
-        "current_opening_hours": currentOpeningHours?.toJson(),
-        "editorial_summary": editorialSummary?.toJson(),
-        "formatted_address": formattedAddress,
-        "geometry": geometry?.toJson(),
-        "icon": icon,
-        "icon_background_color": iconBackgroundColor,
-        "icon_mask_base_uri": iconMaskBaseUri,
-        "name": name,
-        "opening_hours": openingHours?.toJson(),
-        "photos": photos?.map((x) => x.toJson()).toList(),
-        "place_id": placeId,
-        "plus_code": plusCode?.toJson(),
-        "rating": rating,
-        "reference": reference,
-        "reviews": reviews?.map((x) => x.toJson()).toList(),
-        "types": types?.map((x) => x).toList(),
-        "url": url,
-        "user_ratings_total": userRatingsTotal,
-        "utc_offset": utcOffset,
-        "vicinity": vicinity,
-        "website": website,
-        "wheelchair_accessible_entrance": wheelchairAccessibleEntrance,
-      };
+    "address_components": addressComponents?.map((x) => x.toJson()).toList(),
+    "adr_address": adrAddress,
+    "business_status": businessStatus,
+    "current_opening_hours": currentOpeningHours?.toJson(),
+    "editorial_summary": editorialSummary?.toJson(),
+    "formatted_address": formattedAddress,
+    "geometry": geometry?.toJson(),
+    "icon": icon,
+    "icon_background_color": iconBackgroundColor,
+    "icon_mask_base_uri": iconMaskBaseUri,
+    "name": name,
+    "opening_hours": openingHours?.toJson(),
+    "photos": photos?.map((x) => x.toJson()).toList(),
+    "place_id": placeId,
+    "plus_code": plusCode?.toJson(),
+    "rating": rating,
+    "reference": reference,
+    "reviews": reviews?.map((x) => x.toJson()).toList(),
+    "types": types?.map((x) => x).toList(),
+    "url": url,
+    "user_ratings_total": userRatingsTotal,
+    "utc_offset": utcOffset,
+    "vicinity": vicinity,
+    "website": website,
+    "wheelchair_accessible_entrance": wheelchairAccessibleEntrance,
+  };
 }
 
 class AddressComponent {
-  AddressComponent({
-    this.longName,
-    this.shortName,
-    this.types,
-  });
+  AddressComponent({this.longName, this.shortName, this.types});
 
   final String? longName;
   final String? shortName;
@@ -265,18 +261,14 @@ class AddressComponent {
   }
 
   Map<String, dynamic> toJson() => {
-        "long_name": longName,
-        "short_name": shortName,
-        "types": types?.map((x) => x).toList(),
-      };
+    "long_name": longName,
+    "short_name": shortName,
+    "types": types?.map((x) => x).toList(),
+  };
 }
 
 class CurrentOpeningHours {
-  CurrentOpeningHours({
-    this.openNow,
-    this.periods,
-    this.weekdayText,
-  });
+  CurrentOpeningHours({this.openNow, this.periods, this.weekdayText});
 
   final bool? openNow;
   final List<CurrentOpeningHoursPeriod>? periods;
@@ -299,8 +291,11 @@ class CurrentOpeningHours {
       openNow: json["open_now"],
       periods: json["periods"] == null
           ? []
-          : List<CurrentOpeningHoursPeriod>.from(json["periods"]!
-              .map((x) => CurrentOpeningHoursPeriod.fromJson(x))),
+          : List<CurrentOpeningHoursPeriod>.from(
+              json["periods"]!.map(
+                (x) => CurrentOpeningHoursPeriod.fromJson(x),
+              ),
+            ),
       weekdayText: json["weekday_text"] == null
           ? []
           : List<String>.from(json["weekday_text"]!.map((x) => x)),
@@ -308,25 +303,19 @@ class CurrentOpeningHours {
   }
 
   Map<String, dynamic> toJson() => {
-        "open_now": openNow,
-        "periods": periods?.map((x) => x.toJson()).toList(),
-        "weekday_text": weekdayText?.map((x) => x).toList(),
-      };
+    "open_now": openNow,
+    "periods": periods?.map((x) => x.toJson()).toList(),
+    "weekday_text": weekdayText?.map((x) => x).toList(),
+  };
 }
 
 class CurrentOpeningHoursPeriod {
-  CurrentOpeningHoursPeriod({
-    this.close,
-    this.open,
-  });
+  CurrentOpeningHoursPeriod({this.close, this.open});
 
   final PurpleClose? close;
   final PurpleClose? open;
 
-  CurrentOpeningHoursPeriod copyWith({
-    PurpleClose? close,
-    PurpleClose? open,
-  }) {
+  CurrentOpeningHoursPeriod copyWith({PurpleClose? close, PurpleClose? open}) {
     return CurrentOpeningHoursPeriod(
       close: close ?? this.close,
       open: open ?? this.open,
@@ -341,27 +330,19 @@ class CurrentOpeningHoursPeriod {
   }
 
   Map<String, dynamic> toJson() => {
-        "close": close?.toJson(),
-        "open": open?.toJson(),
-      };
+    "close": close?.toJson(),
+    "open": open?.toJson(),
+  };
 }
 
 class PurpleClose {
-  PurpleClose({
-    this.date,
-    this.day,
-    this.time,
-  });
+  PurpleClose({this.date, this.day, this.time});
 
   final DateTime? date;
   final int? day;
   final String? time;
 
-  PurpleClose copyWith({
-    DateTime? date,
-    int? day,
-    String? time,
-  }) {
+  PurpleClose copyWith({DateTime? date, int? day, String? time}) {
     return PurpleClose(
       date: date ?? this.date,
       day: day ?? this.day,
@@ -378,26 +359,20 @@ class PurpleClose {
   }
 
   Map<String, dynamic> toJson() => {
-        "date":
-            "${date?.year.toString().padLeft(4, '0')}-${date?.month.toString().padLeft(2, '0')}-${date?.day.toString().padLeft(2, '0')}",
-        "day": day,
-        "time": time,
-      };
+    "date":
+        "${date?.year.toString().padLeft(4, '0')}-${date?.month.toString().padLeft(2, '0')}-${date?.day.toString().padLeft(2, '0')}",
+    "day": day,
+    "time": time,
+  };
 }
 
 class EditorialSummary {
-  EditorialSummary({
-    this.language,
-    this.overview,
-  });
+  EditorialSummary({this.language, this.overview});
 
   final String? language;
   final String? overview;
 
-  EditorialSummary copyWith({
-    String? language,
-    String? overview,
-  }) {
+  EditorialSummary copyWith({String? language, String? overview}) {
     return EditorialSummary(
       language: language ?? this.language,
       overview: overview ?? this.overview,
@@ -411,25 +386,16 @@ class EditorialSummary {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        "language": language,
-        "overview": overview,
-      };
+  Map<String, dynamic> toJson() => {"language": language, "overview": overview};
 }
 
 class Geometry {
-  Geometry({
-    this.location,
-    this.viewport,
-  });
+  Geometry({this.location, this.viewport});
 
   final Location? location;
   final Viewport? viewport;
 
-  Geometry copyWith({
-    Location? location,
-    Viewport? viewport,
-  }) {
+  Geometry copyWith({Location? location, Viewport? viewport}) {
     return Geometry(
       location: location ?? this.location,
       viewport: viewport ?? this.viewport,
@@ -438,64 +404,45 @@ class Geometry {
 
   factory Geometry.fromJson(Map<String, dynamic> json) {
     return Geometry(
-      location:
-          json["location"] == null ? null : Location.fromJson(json["location"]),
-      viewport:
-          json["viewport"] == null ? null : Viewport.fromJson(json["viewport"]),
+      location: json["location"] == null
+          ? null
+          : Location.fromJson(json["location"]),
+      viewport: json["viewport"] == null
+          ? null
+          : Viewport.fromJson(json["viewport"]),
     );
   }
 
   Map<String, dynamic> toJson() => {
-        "location": location?.toJson(),
-        "viewport": viewport?.toJson(),
-      };
+    "location": location?.toJson(),
+    "viewport": viewport?.toJson(),
+  };
 }
 
 class Location {
-  Location({
-    this.lat,
-    this.lng,
-  });
+  Location({this.lat, this.lng});
 
   final double? lat;
   final double? lng;
 
-  Location copyWith({
-    double? lat,
-    double? lng,
-  }) {
-    return Location(
-      lat: lat ?? this.lat,
-      lng: lng ?? this.lng,
-    );
+  Location copyWith({double? lat, double? lng}) {
+    return Location(lat: lat ?? this.lat, lng: lng ?? this.lng);
   }
 
   factory Location.fromJson(Map<String, dynamic> json) {
-    return Location(
-      lat: json["lat"],
-      lng: json["lng"],
-    );
+    return Location(lat: json["lat"], lng: json["lng"]);
   }
 
-  Map<String, dynamic> toJson() => {
-        "lat": lat,
-        "lng": lng,
-      };
+  Map<String, dynamic> toJson() => {"lat": lat, "lng": lng};
 }
 
 class Viewport {
-  Viewport({
-    this.northeast,
-    this.southwest,
-  });
+  Viewport({this.northeast, this.southwest});
 
   final Location? northeast;
   final Location? southwest;
 
-  Viewport copyWith({
-    Location? northeast,
-    Location? southwest,
-  }) {
+  Viewport copyWith({Location? northeast, Location? southwest}) {
     return Viewport(
       northeast: northeast ?? this.northeast,
       southwest: southwest ?? this.southwest,
@@ -514,17 +461,13 @@ class Viewport {
   }
 
   Map<String, dynamic> toJson() => {
-        "northeast": northeast?.toJson(),
-        "southwest": southwest?.toJson(),
-      };
+    "northeast": northeast?.toJson(),
+    "southwest": southwest?.toJson(),
+  };
 }
 
 class OpeningHours {
-  OpeningHours({
-    this.openNow,
-    this.periods,
-    this.weekdayText,
-  });
+  OpeningHours({this.openNow, this.periods, this.weekdayText});
 
   final bool? openNow;
   final List<OpeningHoursPeriod>? periods;
@@ -548,7 +491,8 @@ class OpeningHours {
       periods: json["periods"] == null
           ? []
           : List<OpeningHoursPeriod>.from(
-              json["periods"]!.map((x) => OpeningHoursPeriod.fromJson(x))),
+              json["periods"]!.map((x) => OpeningHoursPeriod.fromJson(x)),
+            ),
       weekdayText: json["weekday_text"] == null
           ? []
           : List<String>.from(json["weekday_text"]!.map((x) => x)),
@@ -556,25 +500,19 @@ class OpeningHours {
   }
 
   Map<String, dynamic> toJson() => {
-        "open_now": openNow,
-        "periods": periods?.map((x) => x.toJson()).toList(),
-        "weekday_text": weekdayText?.map((x) => x).toList(),
-      };
+    "open_now": openNow,
+    "periods": periods?.map((x) => x.toJson()).toList(),
+    "weekday_text": weekdayText?.map((x) => x).toList(),
+  };
 }
 
 class OpeningHoursPeriod {
-  OpeningHoursPeriod({
-    this.close,
-    this.open,
-  });
+  OpeningHoursPeriod({this.close, this.open});
 
   final FluffyClose? close;
   final FluffyClose? open;
 
-  OpeningHoursPeriod copyWith({
-    FluffyClose? close,
-    FluffyClose? open,
-  }) {
+  OpeningHoursPeriod copyWith({FluffyClose? close, FluffyClose? open}) {
     return OpeningHoursPeriod(
       close: close ?? this.close,
       open: open ?? this.open,
@@ -589,50 +527,30 @@ class OpeningHoursPeriod {
   }
 
   Map<String, dynamic> toJson() => {
-        "close": close?.toJson(),
-        "open": open?.toJson(),
-      };
+    "close": close?.toJson(),
+    "open": open?.toJson(),
+  };
 }
 
 class FluffyClose {
-  FluffyClose({
-    this.day,
-    this.time,
-  });
+  FluffyClose({this.day, this.time});
 
   final int? day;
   final String? time;
 
-  FluffyClose copyWith({
-    int? day,
-    String? time,
-  }) {
-    return FluffyClose(
-      day: day ?? this.day,
-      time: time ?? this.time,
-    );
+  FluffyClose copyWith({int? day, String? time}) {
+    return FluffyClose(day: day ?? this.day, time: time ?? this.time);
   }
 
   factory FluffyClose.fromJson(Map<String, dynamic> json) {
-    return FluffyClose(
-      day: json["day"],
-      time: json["time"],
-    );
+    return FluffyClose(day: json["day"], time: json["time"]);
   }
 
-  Map<String, dynamic> toJson() => {
-        "day": day,
-        "time": time,
-      };
+  Map<String, dynamic> toJson() => {"day": day, "time": time};
 }
 
 class Photo {
-  Photo({
-    this.height,
-    this.htmlAttributions,
-    this.photoReference,
-    this.width,
-  });
+  Photo({this.height, this.htmlAttributions, this.photoReference, this.width});
 
   final int? height;
   final List<String>? htmlAttributions;
@@ -665,26 +583,20 @@ class Photo {
   }
 
   Map<String, dynamic> toJson() => {
-        "height": height,
-        "html_attributions": htmlAttributions?.map((x) => x).toList(),
-        "photo_reference": photoReference,
-        "width": width,
-      };
+    "height": height,
+    "html_attributions": htmlAttributions?.map((x) => x).toList(),
+    "photo_reference": photoReference,
+    "width": width,
+  };
 }
 
 class PlusCode {
-  PlusCode({
-    this.compoundCode,
-    this.globalCode,
-  });
+  PlusCode({this.compoundCode, this.globalCode});
 
   final String? compoundCode;
   final String? globalCode;
 
-  PlusCode copyWith({
-    String? compoundCode,
-    String? globalCode,
-  }) {
+  PlusCode copyWith({String? compoundCode, String? globalCode}) {
     return PlusCode(
       compoundCode: compoundCode ?? this.compoundCode,
       globalCode: globalCode ?? this.globalCode,
@@ -699,9 +611,9 @@ class PlusCode {
   }
 
   Map<String, dynamic> toJson() => {
-        "compound_code": compoundCode,
-        "global_code": globalCode,
-      };
+    "compound_code": compoundCode,
+    "global_code": globalCode,
+  };
 }
 
 class Review {
@@ -772,15 +684,15 @@ class Review {
   }
 
   Map<String, dynamic> toJson() => {
-        "author_name": authorName,
-        "author_url": authorUrl,
-        "language": language,
-        "original_language": originalLanguage,
-        "profile_photo_url": profilePhotoUrl,
-        "rating": rating,
-        "relative_time_description": relativeTimeDescription,
-        "text": text,
-        "time": time,
-        "translated": translated,
-      };
+    "author_name": authorName,
+    "author_url": authorUrl,
+    "language": language,
+    "original_language": originalLanguage,
+    "profile_photo_url": profilePhotoUrl,
+    "rating": rating,
+    "relative_time_description": relativeTimeDescription,
+    "text": text,
+    "time": time,
+    "translated": translated,
+  };
 }
