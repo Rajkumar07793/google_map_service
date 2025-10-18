@@ -1,5 +1,5 @@
 name: google_map_service
-description: "A new Flutter package project."
+description: "A Flutter package that provides a complete service layer for Google Maps, including APIs for map initialization, markers, geocoding, directions, places, and distance calculations — all in a clean, easy-to-use architecture."
 version: 0.0.1
 homepage: "https://github.com/Rajkumar07793/google_map_service.git"
 issue_tracker: https://github.com/Rajkumar07793/google_map_service/issues
