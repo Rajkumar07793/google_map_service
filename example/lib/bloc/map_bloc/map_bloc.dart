@@ -10,7 +10,7 @@ import 'package:google_map_service/core/extensions/location_ext.dart';
 import 'package:google_map_service/data/models/google_map/marker_type.dart';
 // import 'package:google_map_service/data/models/google_map/bitmap.dart';
 import 'package:google_map_service/data/models/google_map/place_detail_response.dart';
-import 'package:google_map_service/data/repositories/google_map_service.dart';
+import 'package:google_map_service/google_map_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapBloc extends Bloc<MapEvent, MapState> {

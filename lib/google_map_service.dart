@@ -246,7 +246,7 @@ class GoogleMapService {
       image = imageInfo.image;
       stream.removeListener(listener);
     } catch (e) {
-      print('⚠️ Failed to load image: $e');
+      debugPrint('⚠️ Failed to load image: $e');
     }
 
     // Fallback image
@@ -288,7 +288,7 @@ class GoogleMapService {
       format: ui.ImageByteFormat.png,
     );
 
-    return BitmapDescriptor.fromBytes(byteData!.buffer.asUint8List());
+    return BitmapDescriptor.bytes(byteData!.buffer.asUint8List());
   }
 
   // ---------------------------------------------------------------------------
@@ -359,7 +359,7 @@ class GoogleMapService {
       format: ui.ImageByteFormat.png,
     );
 
-    return BitmapDescriptor.fromBytes(resizedBytes!.buffer.asUint8List());
+    return BitmapDescriptor.bytes(resizedBytes!.buffer.asUint8List());
   }
 
   // ---------------------------------------------------------------------------
@@ -411,6 +411,6 @@ class GoogleMapService {
     );
     final data = await img.toByteData(format: ui.ImageByteFormat.png);
 
-    return BitmapDescriptor.fromBytes(data!.buffer.asUint8List());
+    return BitmapDescriptor.bytes(data!.buffer.asUint8List());
   }
 }
